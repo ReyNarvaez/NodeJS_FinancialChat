@@ -2,6 +2,7 @@ const express = require('express');
 const router = new express.Router();
 const User = require('../models/user');
 const authenticate  = require('../middleware/auth');
+const cookieHelper = require('../helpers/cookieHelper');
 
 router.get('/login', function(req, res, next) {
   res.render('login', { title: 'Login' });
@@ -17,10 +18,10 @@ router.post('/login', async (req, res) => {
         res.redirect("/");
     } catch (error) {
 
-    		req.cookies.session.error = 'Incorrect username or password';
-    		res.cookie('session', req.cookies.session);
+    		var cookie = cookieHelper.getCookies(req, res);
+    		cookie.error = 'Incorrect username or password';
+    		res.cookie('session', cookie);
     		res.redirect('login');
-        //res.status(401).send();
     }
 });
 

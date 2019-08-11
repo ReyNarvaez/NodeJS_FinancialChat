@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const cookieHelper = require('../helpers/cookieHelper');
 
 const auth = async (req,res,next) => {
     
-    const cookie = getCookie(req,res);
+    const cookie = cookieHelper.getCookies(req,res);
 
     try {
         const token = cookie.token;
@@ -22,19 +23,6 @@ const auth = async (req,res,next) => {
         console.log(error);
         res.redirect('/users/login');
     }
-}
-
-function getCookie(req, res){
-
-    var cookie = req.cookies.session;
-
-    if(cookie == undefined){
-
-        cookie = {'_id' : null, 'token': null, 'error' : null};
-        res.cookie('session', cookie);
-    }
-
-    return cookie;
 }
 
 module.exports = auth;

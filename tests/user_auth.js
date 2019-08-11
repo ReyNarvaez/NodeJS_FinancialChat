@@ -5,25 +5,29 @@ const http = require('http');
 const supertest = require("supertest");
 const request = supertest(http.createServer(app).listen(3001));
 const chai = require("chai");
-const should = chai.should();
+const assert = chai.assert;
+const cookieHelper = require('../helpers/cookieHelper');
+const correctUser = {'email': 'user_test@test.com', 'password': '1234567' };
+const wrongUser = { 'email': 'testuser', 'password': 'testpass' };
 
 describe("# Auth", () => {
-    const endpoint = "/users/login";
-
-    it("should not login with the right user but wrong password", () => {
-        return request.post(endpoint)
-            .send({ "email": "testuser", "password": "testpass" })
-            .expect(401);
-    });
+    const endpoint = '/users/login';
 
     it("should return invalid credentials error", () => {
         return request.post(endpoint)
-            .send({ "email": "testuser", "password": "" })
-            .expect(401)
-            .then(res => {
-                return request.post(endpoint)
-                    .send({ "email": "anotheremail", "password": "mypass" })
-                    .expect(401);
-            });
+            .send(wrongUser)
+            .expect(302)
+            .then(function (err) {
+                return assert.equal(cookieHelper.hasCookieWithError(err), true);
+              });
+    });
+
+    it("should login correctly", () => {
+        return request.post(endpoint)
+            .send(correctUser)
+            .expect(302)
+            .then(function (err) {
+                return assert.equal(cookieHelper.hasCookieWithError(err), false);
+              });
     });
 });
