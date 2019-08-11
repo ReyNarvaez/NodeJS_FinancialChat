@@ -1,0 +1,38 @@
+extends layout
+
+block content
+  .container
+    br
+    .jumbotron
+      h1.display-4 Send Message
+      br
+      input#name.form-control(placeholder='Name')
+      br
+      textarea#message.form-control(placeholder='Your Message Here')
+      br
+      button#send.btn.btn-success Send
+    #messages
+  script.
+    var chatId = '#{id}';
+    $(() => {
+      $('#send').click(()=>{
+        sendMessage({
+          text:$('#message').val()
+        });
+      })
+      //getMessages();
+    })
+
+    function addMessages(message){
+      $('#messages').append('<h4> ${message.name} </h4><p>  ${message.message} </p>');
+    }
+
+    function getMessages(){
+      $.get('http://localhost:3000/messages', (data) => {
+        data.forEach(addMessages);
+      })
+    }
+
+    function sendMessage(message){
+      $.post('http://localhost:3000/chats/' + chatId + '/message', message)
+    }

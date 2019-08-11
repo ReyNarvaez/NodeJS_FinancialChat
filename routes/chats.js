@@ -5,7 +5,7 @@ const Message = require('../models/message');
 const {ObjectID} = require('mongodb');
 const authenticate = require('../middleware/auth');
 
-router.get('/chat/:id', /*authenticate,*/ function(req, res, next) {
+router.get('/chat/:id', authenticate, function(req, res, next) {
   res.render('chat', { id: req.params.id });
 });
 
@@ -45,7 +45,7 @@ router.get('/:id',/*authenticate,*/ async (req,res) => {
     }
 })
 
-router.post('/:id/message',/*authenticate,*/ async (req,res) => {   
+router.post('/:id/message', authenticate, async (req,res) => {   
     const _id = req.params.id
     const userid = req.user._id
 
