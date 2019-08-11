@@ -1,0 +1,26 @@
+extends layout
+
+block title
+	title #{title}
+
+block content
+	h2.page-header Login
+	p
+		| Please Login using the form below
+	form(method='post',action='/users/login')
+		.form-group
+			label Email
+			input.form-control(name='email',type='text',placeholder='Enter Email', required)
+		.form-group
+			label Password
+			input.form-control(name='password',type='password',placeholder='Enter Password', required)
+		input.btn.btn-default(name='submit',type="submit",value='Login')
+	a(class='text-center',href='/users/register') Don't have an account yet? Click to register
+
+	script.
+		const urlParams = new URLSearchParams(window.location.search);
+		const error = urlParams.get('error');
+		
+		if(error) {
+			alert("Incorrect username or password");
+		}

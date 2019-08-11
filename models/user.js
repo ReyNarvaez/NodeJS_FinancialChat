@@ -48,8 +48,16 @@ const UserSchema  = new mongoose.Schema({
     }
 });
 
+UserSchema.pre('save', async function(next){
+    const user = this
+    if(user.isModified('password')){
+        user.password = await bcrypt.hash(user.password, 8)
+    }
+    next()
+})
+
 UserSchema.statics.checkValidCredentials = async (email, password) => {
-    const user = await User.findOne({email});
+    const user = await User.findOne({'email': email});
     let errorMessage = 'Please check your username and password. If you still can\'t log in, contact your Financial Chat administrator.';
 
     if(!user){
@@ -72,6 +80,16 @@ UserSchema.methods.newAuthToken = async function(){
     await user.save();
     return token;
 };
+
+UserSchema.statics.getAll = async () => {
+    const users = await User.find();
+
+    if(!users){
+        throw new Error(errorMessage);
+    }
+
+    return users;
+}
 
 const User = mongoose.model('User', UserSchema);
 

@@ -18,7 +18,8 @@ const auth = async (req,res,next) => {
 
     } catch (error) {
         console.log(error);
-        res.status(401).send({error:'You are not authenticated!'});
+        res.redirect('/users/login');
+        //res.status(401).send({error:'You are not authenticated!'});
     }
 }
 

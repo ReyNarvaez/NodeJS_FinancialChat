@@ -3,21 +3,25 @@ const router = new express.Router();
 const User = require('../models/user');
 const authenticate  = require('../middleware/auth');
 
-router.get('/', function(req, res, next) {
-  res.send('USERS HOME');
+router.get('/login', function(req, res, next) {
+  res.render('login', { title: 'Login' });
 });
 
 router.post('/login', async (req, res) => {
     try {
+    	
         const user = await User.checkValidCredentials(req.body.email, req.body.password);
         const token = await user.newAuthToken();
         res.send({ user, token });
+        //res.redirect("/");
     } catch (error) {
-        res.status(401).send();
+    		
+    		res.redirect('login?error=true');
+        //res.status(401).send();
     }
 });
 
-router.post('/users/logout', authenticate, async (req, res) => {
+router.post('/logout', authenticate, async (req, res) => {
     try {
         req.user.tokens = req.user.tokens.filter((token) =>{
        		return token.token !== req.token;
@@ -29,7 +33,7 @@ router.post('/users/logout', authenticate, async (req, res) => {
     }
 });
 
-router.post('/users/logoutall', authenticate, async (req, res) => {
+router.post('/logoutall', authenticate, async (req, res) => {
     try {
         req.user.tokens = [];
         await req.user.save();
@@ -39,7 +43,13 @@ router.post('/users/logoutall', authenticate, async (req, res) => {
     }
 });
 
-router.post('/users', async (req,res) => {
+router.get('/register', function(req, res, next) {
+  res.render('register', { title: 'Register', form: {} });
+});
+
+router.post('/register', async (req,res) => {
+    
+    //res.send(req.body);
     const user = new User(req.body);
     try{
         const token = await user.newAuthToken();
@@ -48,5 +58,14 @@ router.post('/users', async (req,res) => {
         res.status(400).send(e);
     }
 });
+
+router.get('/all', async (req,res)=> {
+	var users = await User.getAll();
+  res.send(users);
+})
+
+router.get('/me', authenticate ,async (req,res)=> {
+   res.send(req.user)
+})
 
 module.exports = router;
