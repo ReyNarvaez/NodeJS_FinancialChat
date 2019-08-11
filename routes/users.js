@@ -60,10 +60,16 @@ router.post('/register', async (req,res) => {
     const user = new User(req.body);
     try{
         const token = await user.newAuthToken();
+
+        res.cookie('session', {'_id' : user._id, 'token': token, 'error' : null});
         res.redirect('login');
     }catch(e){
-        res.status(400).send(e);
-    }
+        
+        var cookie = cookieHelper.getCookies(req, res);
+        cookie.error = 'There was an error creating your user, please try again';
+        res.cookie('session', cookie);
+        res.redirect('register');
+}
 });
 
 router.get('/all', async (req,res)=> {
