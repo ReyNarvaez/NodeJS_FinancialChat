@@ -56,9 +56,9 @@ router.get('/register', function(req, res, next) {
 });
 
 router.post('/register', async (req,res) => {
-    
-    const user = new User(req.body);
     try{
+
+        const user = new User(req.body);
         const token = await user.newAuthToken();
 
         res.cookie('session', {'_id' : user._id, 'token': token, 'error' : null});
