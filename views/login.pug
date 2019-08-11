@@ -18,9 +18,7 @@ block content
 	a(class='text-center',href='/users/register') Don't have an account yet? Click to register
 
 	script.
-		const urlParams = new URLSearchParams(window.location.search);
-		const error = urlParams.get('error');
-		
-		if(error) {
-			alert("Incorrect username or password");
+		var cookie = JSON.parse(unescape(document.cookie).split("j:")[1]);
+		if(cookie.error != null) {
+			alert(unescape(cookie.error));
 		}
