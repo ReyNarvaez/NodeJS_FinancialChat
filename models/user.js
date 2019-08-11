@@ -48,6 +48,31 @@ const UserSchema  = new mongoose.Schema({
     }
 });
 
+UserSchema.statics.checkValidCredentials = async (email, password) => {
+    const user = await User.findOne({email});
+    let errorMessage = 'Please check your username and password. If you still can\'t log in, contact your Financial Chat administrator.';
+
+    if(!user){
+        throw new Error(errorMessage);
+    }
+
+    const isMatch = await bcrypt.compare(password,user.password);
+
+    if(!isMatch){
+        throw new Error(errorMessage);
+    }
+
+    return user;
+}
+
+UserSchema.methods.newAuthToken = async function(){
+    const user = this;
+    const token = jwt.sign({ _id: user.id.toString() }, process.env.JWT_SECRET);
+    user.tokens = user.tokens.concat({ token });
+    await user.save();
+    return token;
+};
+
 const User = mongoose.model('User', UserSchema);
 
 module.exports = User;
