@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha tests/**/*user_auth.js --reporter spec --exit",
+    "test": "node ./node_modules/mocha/bin/mocha --timeout 10000 tests/**/*user_auth.js --reporter spec --exit",
     "start": "node app",
     "dev": "nodemon app"
   },
