@@ -91,32 +91,56 @@ block content
                     | astrology under one roof.
         .mesgs
           #chatWindow.msg_history
+            .incoming_msg
+              .incoming_msg_img
+                img(src='https://ptetutorials.com/images/user-profile.png', alt='sunil')
+              .received_msg
+                .received_withd_msg
+                  p
+                    | Test which is a new approach to have all
+                    | solutions
+                  span.time_date  11:01 AM    |    June 9
+            .outgoing_msg
+              .sent_msg
+                p
+                  | Test which is a new approach to have all
+                  | solutions
+                span.time_date  11:01 AM    |    June 9
+            .incoming_msg
+              .incoming_msg_img
+                img(src='https://ptetutorials.com/images/user-profile.png', alt='sunil')
+              .received_msg
+                .received_withd_msg
+                  p Test, which is a new approach to have
+                  span.time_date  11:01 AM    |    Yesterday
+            .outgoing_msg
+              .sent_msg
+                p Apollo University, Delhi, India Test
+            .incoming_msg
+              .received_msg
+                .received_withd_msg
+                  p
+                    | We work directly with our designers and suppliers,
+                    | and sell direct to you, which means quality, exclusive
+                    | products, at a price anyone can afford.
+                  span.time_date  11:01 AM    |    Today
           .type_msg
             .input_msg_write
-              input#textMessage.write_msg(type='text', placeholder='Type a message')
+              input.write_msg(type='text', placeholder='Type a message')
               button#send.msg_send_btn(type='button')
                 i.fa.fa-paper-plane-o(aria-hidden='true')
     script.
       var socket = io.connect('http://localhost:3000');
-      var chatId = '#{chatId}';
-      var userId = '#{userId}';
+      var chatId = '5d50976a26e39564e87739e9';
+      var userId = '5d50976a26e39564e87739e9';
       
       $(() => {
-
-        $('#textMessage').keypress(function (e) {
-         var key = e.which;
-         if(key == 13)  // the enter key code
-          {
-            $('#send').click();
-            return false;  
-          }
-        });   
-
         $('#send').click(()=>{
+          /*
           sendMessage({
-            text:$('#textMessage').val()
+            text:$('#message').val()
           });
-          $('#textMessage').val('');
+          */
         })
         //getMessages();
       })        
@@ -126,13 +150,9 @@ block content
       }    
 
       socket.on('newMessage', function(msg){
-        appendNewMessage(msg)
+        $('#messages').append($('<li>').html(msg));
       });
 
       function appendNewMessage(msg){
-        if(msg.userId != userId){
-          $('#chatWindow').append('<div class="incoming_msg"><div class="received_msg"><div class="received_withd_msg"><p>' + msg.text + '</p></div></div></div>');
-        }else{
-          $('#chatWindow').append('<div class="outgoing_msg"><div class="sent_msg"><p>' + msg.text + '</p></div>');
-        }  
+      	$('#chatWindow').append('<div class="outgoing_msg"><div class="sent_msg"><p>' + msg + '</p></div>');
       }

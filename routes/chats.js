@@ -6,7 +6,7 @@ const {ObjectID} = require('mongodb');
 const authenticate = require('../middleware/auth');
 
 router.get('/chat/:id', authenticate, function(req, res, next) {
-  res.render('chat', { id: req.params.id });
+  res.render('chat', { chatId: req.params.id, userId: req.user._id});
 });
 
 router.post('/chat', async (req,res) => {
@@ -69,7 +69,7 @@ router.post('/:id/message', authenticate, async (req,res) => {
     
 
     var io = req.app.get('socketio');
-    io.emit('newMessage', req.body.text);
+    io.emit('newMessage', {userId: userid, text: req.body.text});
 
     try {
         await message.save()
