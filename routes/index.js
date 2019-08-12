@@ -7,11 +7,6 @@ router.get('/', authenticate, function(req, res, next) {
   res.render('index', { title: 'Chat' });
 });
 
-/* GET home page. */
-router.get('/test', authenticate, function(req, res, next) {
-  res.render('chatTest', { title: 'Chat' });
-});
-
 router.get('/clearCookies', function(req, res){
    res.clearCookie('Authorization');
    res.clearCookie('error');

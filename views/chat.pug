@@ -11,84 +11,7 @@ block content
           .headind_srch
             .recent_heading
               h4 Chats
-          .inbox_chat
-            .chat_list.active_chat
-              .chat_people
-                .chat_img
-                  img(src='https://ptetutorials.com/images/user-profile.png', alt='sunil')
-                .chat_ib
-                  h5
-                    | Sunil Rajput 
-                    span.chat_date Dec 25
-                  p
-                    | Test, which is a new approach to have all solutions
-                    | astrology under one roof.
-            .chat_list
-              .chat_people
-                .chat_img
-                  img(src='https://ptetutorials.com/images/user-profile.png', alt='sunil')
-                .chat_ib
-                  h5
-                    | Sunil Rajput 
-                    span.chat_date Dec 25
-                  p
-                    | Test, which is a new approach to have all solutions
-                    | astrology under one roof.
-            .chat_list
-              .chat_people
-                .chat_img
-                  img(src='https://ptetutorials.com/images/user-profile.png', alt='sunil')
-                .chat_ib
-                  h5
-                    | Sunil Rajput 
-                    span.chat_date Dec 25
-                  p
-                    | Test, which is a new approach to have all solutions
-                    | astrology under one roof.
-            .chat_list
-              .chat_people
-                .chat_img
-                  img(src='https://ptetutorials.com/images/user-profile.png', alt='sunil')
-                .chat_ib
-                  h5
-                    | Sunil Rajput 
-                    span.chat_date Dec 25
-                  p
-                    | Test, which is a new approach to have all solutions
-                    | astrology under one roof.
-            .chat_list
-              .chat_people
-                .chat_img
-                  img(src='https://ptetutorials.com/images/user-profile.png', alt='sunil')
-                .chat_ib
-                  h5
-                    | Sunil Rajput 
-                    span.chat_date Dec 25
-                  p
-                    | Test, which is a new approach to have all solutions
-                    | astrology under one roof.
-            .chat_list
-              .chat_people
-                .chat_img
-                  img(src='https://ptetutorials.com/images/user-profile.png', alt='sunil')
-                .chat_ib
-                  h5
-                    | Sunil Rajput 
-                    span.chat_date Dec 25
-                  p
-                    | Test, which is a new approach to have all solutions
-                    | astrology under one roof.
-            .chat_list
-              .chat_people
-                .chat_img
-                  img(src='https://ptetutorials.com/images/user-profile.png', alt='sunil')
-                .chat_ib
-                  h5
-                    | Sunil Rajput 
-                    span.chat_date Dec 25
-                  p
-                    | Test, which is a new approach to have all solutions
-                    | astrology under one roof.
+          #allChats.inbox_chat
         .mesgs
           #chatWindow.msg_history
           .type_msg
@@ -101,6 +24,30 @@ block content
       var chatId = '#{chatId}';
       var userId = '#{userId}';
       
+      $( document ).ready(function() {
+        var chats = JSON.parse(unescape('#{chats}'));
+        chats.forEach(function(chat){
+          populateChats(chat);
+        });
+
+        var messages = JSON.parse(unescape('#{messages}'));
+        messages.forEach(function(message){
+          appendNewMessage(message);
+        });        
+      });
+
+      function populateChats(chat){
+        if(chat._id == chatId){
+          $('#allChats').append('<div class="chat_list active_chat" onclick="openChat(\''+chat._id+'\')"><div class="chat_people"><div class="chat_ib"><h5>'+ chat.title +' </h5><p></p></div></div></div>');
+        }else{
+          $('#allChats').append('<div class="chat_list" onclick="openChat(\''+chat._id+'\')"><div class="chat_people"><div class="chat_ib"><h5>'+ chat.title +' </h5><p></p></div></div></div>');
+        }
+      }
+
+      function openChat(id){
+        window.location.href = "http://localhost:3000/chats/chat/" + id;
+      }
+
       $(() => {
 
         $('#textMessage').keypress(function (e) {
@@ -130,9 +77,12 @@ block content
       });
 
       function appendNewMessage(msg){
-        if(msg.userId != userId){
+        if(msg.author != userId){
           $('#chatWindow').append('<div class="incoming_msg"><div class="received_msg"><div class="received_withd_msg"><p>' + msg.text + '</p></div></div></div>');
         }else{
           $('#chatWindow').append('<div class="outgoing_msg"><div class="sent_msg"><p>' + msg.text + '</p></div>');
-        }  
+        }
+        $('#chatWindow').animate({
+            scrollTop: $('#chatWindow').get(0).scrollHeight
+        }, 0);
       }

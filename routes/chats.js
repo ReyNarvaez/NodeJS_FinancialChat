@@ -5,8 +5,19 @@ const Message = require('../models/message');
 const {ObjectID} = require('mongodb');
 const authenticate = require('../middleware/auth');
 
-router.get('/chat/:id', authenticate, function(req, res, next) {
-  res.render('chat', { chatId: req.params.id, userId: req.user._id});
+router.get('/chat/:id', authenticate, async function(req, res, next) {
+
+    const chats = await Chat.find({}).sort('-date').limit(50).lean();
+    const messages = await Message.find({'chatId' : req.params.id}).sort('-date').limit(50).lean();
+
+    res.render('chat', 
+        { 
+            chatId: req.params.id, 
+            userId: req.user._id, 
+            chats: escape(JSON.stringify(chats)), 
+            messages: escape(JSON.stringify(messages))
+        }
+    );
 });
 
 router.post('/chat', async (req,res) => {
@@ -69,7 +80,7 @@ router.post('/:id/message', authenticate, async (req,res) => {
     
 
     var io = req.app.get('socketio');
-    io.emit('newMessage', {userId: userid, text: req.body.text});
+    io.emit('newMessage', {author: userid, text: req.body.text});
 
     try {
         await message.save()
