@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha tests/**/*user_auth.js --reporter spec --exit",
-    "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "start": "node app",
+    "dev": "nodemon app"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -19,6 +19,7 @@
     "mongoose": "^5.6.9",
     "morgan": "~1.9.1",
     "pug": "2.0.0-beta11",
+    "socket.io": "^2.2.0",
     "validator": "^11.1.0"
   },
   "devDependencies": {

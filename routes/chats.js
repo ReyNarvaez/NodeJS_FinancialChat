@@ -49,6 +49,10 @@ router.post('/:id/message', authenticate, async (req,res) => {
     const _id = req.params.id
     const userid = req.user._id
 
+    console.log(_id);
+    console.log(userid);
+    console.log(req.body.text);
+
     if (!ObjectID.isValid(_id)) {
         return res.status(404).send();
     }
@@ -62,6 +66,10 @@ router.post('/:id/message', authenticate, async (req,res) => {
         author: userid,
         chatId: _id
     })
+    
+
+    var io = req.app.get('socketio');
+    io.emit('newMessage', req.body.text);
 
     try {
         await message.save()

@@ -1,6 +1,7 @@
 extends layout
 
 block content
+  script(src='/socket.io/socket.io.js')
   .container
     br
     .jumbotron
@@ -13,6 +14,7 @@ block content
       button#send.btn.btn-success Send
     #messages
   script.
+    var socket = io.connect('http://localhost:3000');
     var chatId = '#{id}';
     $(() => {
       $('#send').click(()=>{
@@ -21,18 +23,12 @@ block content
         });
       })
       //getMessages();
-    })
-
-    function addMessages(message){
-      $('#messages').append('<h4> ${message.name} </h4><p>  ${message.message} </p>');
-    }
-
-    function getMessages(){
-      $.get('http://localhost:3000/messages', (data) => {
-        data.forEach(addMessages);
-      })
-    }
+    })    
 
     function sendMessage(message){
       $.post('http://localhost:3000/chats/' + chatId + '/message', message)
     }
+
+    socket.on('newMessage', function(msg){
+      $('#messages').append($('<li>').html(msg));
+    });
