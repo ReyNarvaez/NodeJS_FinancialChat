@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha --timeout 10000 tests/**/*user_auth.js --reporter spec --exit",
-    "start": "node app",
-    "dev": "nodemon app"
+    "start": "node ./service/src/app.js",
+    "dev": "nodemon ./service/src/app.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -20,7 +20,8 @@ block content
               button#send.msg_send_btn(type='button')
                 i.fa.fa-paper-plane-o(aria-hidden='true')
     script.
-      var socket = io.connect('http://localhost:3000');
+      var origin = window.location.origin;
+      var socket = io.connect(origin);
       var chatId = '#{chatId}';
       var userId = '#{userId}';
       
@@ -45,7 +46,7 @@ block content
       }
 
       function openChat(id){
-        window.location.href = "http://localhost:3000/chats/chat/" + id;
+        window.location.href = origin + "/chats/chat/" + id;
       }
 
       $(() => {
@@ -69,7 +70,7 @@ block content
       })        
 
       function sendMessage(message){
-        $.post('http://localhost:3000/chats/' + chatId + '/message', message)
+        $.post(origin + '/chats/' + chatId + '/message', message)
       }    
 
       socket.on('newMessage', function(msg){

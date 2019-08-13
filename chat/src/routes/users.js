@@ -73,8 +73,8 @@ router.post('/register', async (req,res) => {
 });
 
 router.get('/all', async (req,res)=> {
-	var users = await User.getAll();
-  res.send(users);
+    var users = await User.getAll();
+    res.send(users);
 })
 /*
 router.get('/me', authenticate ,async (req,res)=> {

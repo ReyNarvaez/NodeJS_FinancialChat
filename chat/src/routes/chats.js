@@ -22,7 +22,6 @@ router.get('/chat/:id', authenticate, async function(req, res, next) {
 
 router.post('/chat', async (req,res) => {
     try{
-        console.log(req.body);
         const chat = new Chat(req.body);
         await chat.save()
         res.status(201).send(chat)
@@ -59,10 +58,6 @@ router.get('/:id',/*authenticate,*/ async (req,res) => {
 router.post('/:id/message', authenticate, async (req,res) => {   
     const _id = req.params.id
     const userid = req.user._id
-
-    console.log(_id);
-    console.log(userid);
-    console.log(req.body.text);
 
     if (!ObjectID.isValid(_id)) {
         return res.status(404).send();

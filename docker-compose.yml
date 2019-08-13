@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  chat:
+    container_name: chat
+    build:
+      context: .
+      args:
+        - service_src=chat
+    ports:
+      - "3000:3000"
+    depends_on:
+      - "mongo"
+    command: bash -c "npm run dev"
+    restart: on-failure
+    env_file:
+      - ./chat/.env
+    volumes:
+      - ./chat/src:/usr/src/app/service/src:cached
+      - ./common:/usr/src/app/common:cached
+    networks:
+      - all
+  mongo:
+    image : "mongo"
+    ports:
+      - "27017:27017"
+    networks:
+      - all
+
+networks:
+  all:
