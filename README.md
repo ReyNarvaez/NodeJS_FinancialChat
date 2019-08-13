@@ -28,8 +28,8 @@ NodeJS app that uses socket.io to enable real-time communication
 
 ## Usage
 
-* got to [http://localhost:3000](http://localhost:3000)
-* if you are using Docker toolbox for windows got to [http://localhost:3000](http://192.168.99.100:3000)
-* register a new user
-* login
-* start chatting
+* Go to [http://localhost:3000](http://localhost:3000)
+* If you are using Docker toolbox for windows got to [http://192.168.99.100:3000](http://192.168.99.100:3000)
+* Register a new user
+* Login
+* Start chatting
