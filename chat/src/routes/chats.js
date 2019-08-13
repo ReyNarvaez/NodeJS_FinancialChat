@@ -7,7 +7,7 @@ const authenticate = require('../middleware/auth');
 
 router.get('/chat/:id', authenticate, async function(req, res, next) {
 
-    const chats = await Chat.find({}).sort('-date').limit(50).lean();
+    const chats = await Chat.find({}).lean();
     const messages = await Message.find({'chatId' : req.params.id}).sort('-date').limit(50).lean();
 
     res.render('chat', 

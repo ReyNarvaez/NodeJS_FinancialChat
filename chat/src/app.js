@@ -1,4 +1,4 @@
-console.log('"Starting app');
+console.log('Starting app');
 require('../dotenvconfig');
 require('./db/mongoose');
 var createError = require('http-errors');
