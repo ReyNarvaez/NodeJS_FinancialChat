@@ -36,20 +36,6 @@ router.get('/logout', authenticate, async (req, res) => {
         res.status(500).send();
     }
 });
-/*
-router.get('/logoutall', async (req, res) => {
-    try {
-        console.log("in logoutall" + req.user);
-        req.user.tokens = [];
-        console.log("current user: " + req.user);
-        await req.user.save();
-    		res.clearCookie('authorization');
-        res.redirect('login');
-    } catch (error) {
-        res.status(500).send();
-    }
-});
-*/
 
 router.get('/register', function(req, res, next) {
   res.render('register', { title: 'Register', form: {} });

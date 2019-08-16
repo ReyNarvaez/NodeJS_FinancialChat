@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Chat = require('../models/chat');
+const User = require('../models/user');
 console.log('starting database connection to: ' + process.env.MONGODB_URL);
 
 mongoose.connect(process.env.MONGODB_URL,{
@@ -16,6 +17,7 @@ db.on('error', function(){
 db.once('open', async function (){
 	console.log('connected to database');
   createChats();
+  createTestUser();
 });
 
 const createChats = async () => {
@@ -35,3 +37,21 @@ const createChats = async () => {
   	}
   }
 }
+
+const fullCorrectUser = {'name': 'testUser', 'email': 'test_user@test.com', 'password': '1234567' };
+
+const createTestUser = async () => {
+    
+  console.log('creating test user');
+  
+  try{
+
+    const user = new User(fullCorrectUser);
+    await user.save();
+    console.log('Created test user ' + fullCorrectUser.email);
+  }catch(e){
+    //test user is already created
+    //console.log('error creating test user ' + fullCorrectUser.email);
+  }
+}
+

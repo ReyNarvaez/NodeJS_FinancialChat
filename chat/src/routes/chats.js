@@ -30,7 +30,7 @@ router.post('/chat', async (req,res) => {
     }
 });
 
-router.get('/chats', /*authenticate,*/ async (req,res) => {
+router.get('/chats', authenticate, async (req,res) => {
     try {
         const chats = await Chat.find({})
         res.send(chats)
@@ -39,7 +39,7 @@ router.get('/chats', /*authenticate,*/ async (req,res) => {
     }
 })
 
-router.get('/:id',/*authenticate,*/ async (req,res) => {
+router.get('/:id', authenticate, async (req,res) => {
     const _id =  req.params.id
     if (!ObjectID.isValid(_id)) {
         return res.status(404).send();
@@ -86,43 +86,6 @@ router.post('/:id/message', authenticate, async (req,res) => {
 
 })
 
-//get all the messages related to the chat
-router.get('/:id/message', async (req,res) => {
-    try {
-        const chat = await Chat.findOne({_id: req.params.id})
-        await chat.populate('messages').execPopulate()
-        res.send(chat.messages)
-    } catch (error) {
-        res.status(500).send()
-    }
-})
-
-router.patch('/:id',authenticate, async (req, res) => {
-    const _id = req.params.id
-    const updates = Object.keys(req.body);
-    const allowedUpdates = ["description", "title"]
-    const isValidOperation  = updates.every((update) => allowedUpdates.includes(update))
-    if(!isValidOperation){
-        res.status(400).send({error:'Invalid updates'})
-    }
-    if (!ObjectID.isValid(_id)) {
-        res.status(404).send();
-    }
-    try {
-        const chat = await Chat.findOne({_id: req.params.id, author:req.user._id})
-        
-       if(!chat){
-        res.status(404).send();
-       }
-
-       updates.forEach((update) => chat[update] = req.body[update])
-       await chat.save()
-
-       res.send(chat);
-    } catch (error) {
-        res.status(400).send();
-    }
-})
 
 router.delete('/:id', authenticate,async (req,res) => {
     const _id = req.params.id
@@ -139,5 +102,6 @@ router.delete('/:id', authenticate,async (req,res) => {
         res.status(500).send()
     }
 })
+
 
 module.exports = router

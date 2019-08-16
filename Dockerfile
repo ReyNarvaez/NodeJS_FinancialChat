@@ -8,7 +8,7 @@ WORKDIR /home/node/app
 
 COPY package*.json ./
 COPY $service_src/src ./service/src
-COPY $service_src/tests ./service/tests
+COPY $service_src/tests ./service/src/tests
 COPY $service_src/.env ./service/.env
 COPY $service_src/.env ./service/dotenvconfig
 
