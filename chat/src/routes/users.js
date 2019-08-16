@@ -14,7 +14,6 @@ router.post('/login', async (req, res) => {
         const user = await User.checkValidCredentials(req.body.email, req.body.password);
         const token = await user.newAuthToken();
         res.cookie('session', {'_id' : user._id, 'token': token, 'error' : null});
-        //res.send({ user, token });
         res.redirect("/");
     } catch (error) {
 
@@ -55,17 +54,12 @@ router.post('/register', async (req,res) => {
         cookie.error = 'There was an error creating your user, please try again';
         res.cookie('session', cookie);
         res.redirect('register');
-}
+    }
 });
 
 router.get('/all', async (req,res)=> {
     var users = await User.getAll();
     res.send(users);
 })
-/*
-router.get('/me', authenticate ,async (req,res)=> {
-   res.send(req.user)
-})
-*/
 
 module.exports = router;
